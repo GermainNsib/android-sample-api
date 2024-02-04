@@ -1,0 +1,104 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    // [START maps_android_secrets_gradle_plugin]
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    // [END maps_android_secrets_gradle_plugin]
+}
+
+android {
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.google.maps.example"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.2'
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    flavorDimensions "version"
+
+    productFlavors {
+        gms {
+            dimension "version"
+            applicationIdSuffix ".gms"
+            versionNameSuffix "-gms"
+        }
+        v3 {
+            dimension "version"
+            applicationIdSuffix ".v3"
+            versionNameSuffix "-v3"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace 'com.google.maps.example'
+}
+
+// [START maps_android_compose_dependency]
+dependencies {
+    // [START_EXCLUDE silent]
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "androidx.compose.foundation:foundation:1.4.0-beta01"
+    implementation "androidx.compose.material:material:1.4.0-beta01"
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation 'com.google.android.libraries.places:places:3.0.0'
+    gmsImplementation 'com.google.maps.android:maps-ktx:3.4.0'
+    gmsImplementation 'com.google.maps.android:maps-compose:2.15.0'
+    gmsImplementation 'com.google.android.gms:play-services-maps:18.1.0'
+    gmsImplementation 'com.google.maps.android:android-maps-utils:3.5.3'
+    gmsImplementation 'com.google.maps.android:maps-rx:1.0.0'
+    gmsImplementation 'com.google.maps.android:places-rx:1.0.0'
+    v3Implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
+
+    testImplementation 'junit:junit:4.13.2'
+
+    // [END_EXCLUDE]
+    implementation 'com.google.maps.android:maps-compose:2.15.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+}
+// [END maps_android_compose_dependency]
+
+// [START maps_android_secrets_gradle_plugin_config]
+secrets {
+    // Optionally specify a different file name containing your secrets.
+    // The plugin defaults to "local.properties"
+    propertiesFileName = "secrets.properties"
+
+    // A properties file containing default secret values. This file can be
+    // checked in version control.
+    defaultPropertiesFileName = 'local.defaults.properties'
+
+    // Configure which keys should be ignored by the plugin by providing regular expressions.
+    // "sdk.dir" is ignored by default.
+    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
+}
+// [END maps_android_secrets_gradle_plugin_config]
